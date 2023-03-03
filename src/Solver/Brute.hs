@@ -7,10 +7,10 @@ import Data.Function (on)
 import Helper.Functions (toSolution, sumWeights, sumCosts)
 import Helper.Types (Subset, Solution, Knapsack(..), Item)
 
-brute :: Knapsack -> Maybe Solution
+brute :: Knapsack -> Solution
 brute k = brute' (maxWeight k) (minCost k) (items k)
 
-brute' :: Int -> Int -> [Item] -> Maybe Solution
+brute' :: Int -> Int -> [Item] -> Solution
 brute' maxW minC xss = toSolution $ findBest $ filterFeasible $ subsets xss
   where
     findBest :: [Subset Item] -> Maybe (Subset Item)

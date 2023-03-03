@@ -4,6 +4,7 @@ import System.Directory
 import System.IO
 import Solver.Brute (brute)
 import Helper.Types (Knapsack(..), Item(..), Solution)
+import Helper.Functions (showSolution)
 
 -- System.Exit fcia die pre chybu
 -- if length args == 0 then die "asdlfkajsdf" else return ()
@@ -26,9 +27,10 @@ knapsack = Knapsack {
           }
 
 dispatch :: [(String, Knapsack -> String)]
+-- TODO: Show solutions properly
 dispatch = [ 
             --  ("-i", info),
-             ("-b", show . brute)
+             ("-b", showSolution . brute)
             --  ("-o", optim)
            ]
 
