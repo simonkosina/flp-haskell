@@ -1,18 +1,18 @@
+-- TODO: Refactor imports
 import System.Environment
 import System.Directory
 import System.IO
-import Data.List
+import Solver.Brute (brute)
+import Helper.Types (Knapsack(..), Item(..), Solution)
 
-data Item = Item {
-  weight :: Int,
-  cost :: Int
-} deriving (Show, Read)
+-- System.Exit fcia die pre chybu
+-- if length args == 0 then die "asdlfkajsdf" else return ()
 
-data Knapsack = Knapsack {
-  maxWeight :: Int,
-  minCost :: Int,
-  items :: [Item]
-} deriving (Show, Read)
+-- TODO: Print the Knapsack on multiple line
+-- instance Show TrafficLight where
+-- show Red = "Red light"
+-- show Yellow = "Yellow light"
+-- show Green = "Green light"
 
 knapsack = Knapsack {
             maxWeight = 46,
@@ -25,22 +25,25 @@ knapsack = Knapsack {
             ]
           }
 
-dispatch :: [(String, [String] -> IO())]
-dispatch = [ ("-i", info),
-             ("-b", brute),
-             ("-o", optim)
+dispatch :: [(String, Knapsack -> String)]
+dispatch = [ 
+            --  ("-i", info),
+             ("-b", show . brute)
+            --  ("-o", optim)
            ]
 
+-- TODO: Catch err when opening files (http://learnyouahaskell.com/input-and-output#exceptions)
+-- TODO: brute results in error if no solution exists (use try/catch https://stackoverflow.com/questions/6009384/exception-handling-in-haskell0)
 -- TODO: Expect incorrect arguments? Check #flp discord question.
--- TODO: Print output on multiple lines instead of one?
+-- TODO: Print output on multiple lines instead of one! (Priklad cviko)
+-- TODO: src folder, make file, build?
 main :: IO ()
 main = do
   (switch:args) <- getArgs
   let (Just action) = lookup switch dispatch
-  action args
+  -- putStrLn (action args)
+  putStrLn (action knapsack)
 
-info _ = putStrLn "info"
+-- info _ = putStrLn "info"
 
-brute _ = putStrLn "brute"
-
-optim _ = putStrLn "optim"
+-- optim _ = putStrLn "optim"
