@@ -1,26 +1,28 @@
--- TODO: Refactor imports
-import System.Environment
-import System.Directory
-import System.IO
-import Control.Monad (when)
-import System.Exit
+import System.Environment (getArgs)
+import System.Exit (die)
 import Solver.Brute (brute)
+
+import Control.Applicative ((<|>))
+import Control.Monad (when)
+
 import Helper.Types (Knapsack(..), Item(..), Solution)
 import Helper.Functions (showSolution)
 
--- System.Exit fcia die pre chybu
--- if length args == 0 then die "asdlfkajsdf" else return ()
+-- TODO: Extract parsing to a file
+import qualified Text.Parsec as Parsec
+import Text.Parsec((<?>))
+import qualified Data.Char as Parsec
 
-knapsack = Knapsack {
-            maxWeight = 46,
-            minCost = 324,
-            items = [
-              Item { weight = 36, cost = 3 },
-              Item { weight = 43, cost = 1129 },
-              Item { weight = 202, cost = 94 },
-              Item { weight = 149, cost = 2084 }
-            ]
-          }
+-- knapsack = Knapsack {
+--             maxWeight = 46,
+--             minCost = 324,
+--             items = [
+--               Item { weight = 36, cost = 3 },
+--               Item { weight = 43, cost = 1129 },
+--               Item { weight = 202, cost = 94 },
+--               Item { weight = 149, cost = 2084 }
+--             ]
+--           }
 
 dispatch :: [(String, Knapsack -> IO ())]
 dispatch = [
@@ -29,30 +31,50 @@ dispatch = [
             --  ("-o", optim)
            ]
 
--- TODO: Catch err when opening files (http://learnyouahaskell.com/input-and-output#exceptions)
--- TODO: brute results in error if no solution exists (use try/catch https://stackoverflow.com/questions/6009384/exception-handling-in-haskell0)
+parse rule = Parsec.parse rule "(source)"
+
+-- knapsackParser :: Parsec.Parsec String () Knapsack
+knapsackParser :: Parsec.Parsec String () Int
+knapsackParser = do
+  Parsec.string "Knapsack {"
+  Parsec.newline
+  return 0
+
+maxWeightParser :: Parsec.Parsec String () Int
+maxWeightParser = do
+  Parsec.string "maxWeight: "
+  digits <- Parsec.many1 Parsec.digit
+  Parsec.newline
+  return (read digits :: Int)
+
+minCostParser :: Parsec.Parsec String () Int
+minCostParser = do
+  Parsec.string "minCost: "
+  digits <- Parsec.many1 Parsec.digit
+  Parsec.newline
+  return (read digits :: Int)
+
 -- TODO: Expect incorrect arguments? Check #flp discord question.
--- TODO: Print output on multiple lines instead of one! (Priklad cviko)
--- TODO: src folder, make file, build?
--- TODO: take input from STDIN
--- TODO: proper error statements
 main :: IO ()
 main = do
   args <- getArgs
   let action = head args
-  
+
   when (null args || length args > 2) $ die "usage: flp22-fun option [input]"
   when (action `notElem` ["-i", "-b", "-o"]) $ die $ "Unknown option '" ++ action ++ "', only -i, -b and -o are supported."
 
-  if length args == 2
-    then do
-      let filePath = last args
-      knapsackString <- readFile filePath
-      return ()
-    else do
-      knapsackString <- getContents
-      return ()
+  -- if length args == 2
+  --   then do
+  --     let filePath = last args
+  --     knapsackString <- readFile filePath
+  --     return ()
+  --   else do
+  --     knapsackString <- getContents
+  --     return ()
 
+  knapsackString <- readFile "knapsack.txt"
+
+  print $ parse knapsackParser knapsackString
 
   -- let (Just action) = lookup switch dispatch
   -- putStrLn (action args)
