@@ -11,9 +11,9 @@ toSolution :: Maybe (Subset Item) -> Solution
 toSolution Nothing = Nothing
 toSolution (Just xs) = Just $ map fst xs
 
-showSolution :: Solution -> String
-showSolution Nothing = "Couldn't find a solution for the given knapsack instance! :("
-showSolution (Just s) = show s
+showSolution :: Solution -> IO ()
+showSolution Nothing = error "Couldn't find a solution for the given knapsack instance! :("
+showSolution (Just s) = print s
 
 sumCosts :: Subset Item -> Int
 sumCosts xs = sum (map (cost . snd) (filter (\x -> fst x /= 0) xs))
