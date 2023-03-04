@@ -4,6 +4,9 @@ module Solver.Optim (
 
 import System.Random
 
+import Data.Function (on)
+import Data.List (maximumBy)
+
 import Helper.Types (Subset, Solution, Knapsack(..), Item(..))
 import Helper.Functions (sumCosts, sumWeights)
 
@@ -53,8 +56,18 @@ initPopulation k n gen =
       (restOfPopulation, finalGen) = initPopulation k (n-1) newGen
   in (individual : restOfPopulation, finalGen)
 
--- tournament :: Population -> Int -> StdGen -> Individual
--- tournament p n gen = 
+tournament :: (Ord a) => (Individual -> a) -> Population -> Int -> StdGen -> (Individual, StdGen)
+tournament f p n gen =
+  let
+    (sample, newGen) = samplePopulation p n gen
+    winner = maximumBy (compare `on` f) sample
+  in (winner, newGen)
+
+samplePopulation :: Population -> Int -> StdGen -> (Population, StdGen)
+samplePopulation p n gen =
+  let (indices, newGen) = differentRandomRs (0, length p - 1) n gen
+      samples = map (p !!) indices
+  in (samples, newGen)
 
 -- cituj http://learnyouahaskell.com/input-and-output#randomness
 finiteRandoms :: (RandomGen g, Random a) => Int -> g -> ([a], g)
@@ -69,7 +82,7 @@ differentRandomRs (lower, upper) n gen = differentRandoms' n [] gen
   where
   differentRandoms' n list gen
     | n == length list = (list, gen)
-    | otherwise = 
+    | otherwise =
       let (value, newGen) = randomR (lower, upper) gen
           newList = if value `notElem` list then value:list else list
       in differentRandoms' n newList newGen

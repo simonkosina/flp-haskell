@@ -4,6 +4,7 @@ module Solver.Brute (
 
 import Data.List (maximumBy)
 import Data.Function (on)
+
 import Helper.Functions (toSolution, sumWeights, sumCosts)
 import Helper.Types (Subset, Solution, Knapsack(..), Item)
 
@@ -15,7 +16,7 @@ brute' maxW minC xss = toSolution $ findBest $ filterFeasible $ subsets xss
   where
     findBest :: [Subset Item] -> Maybe (Subset Item)
     findBest [] = Nothing
-    findBest all@(x:xs) = Just $ maximumBy (compare `on` sumCosts) all
+    findBest xs = Just $ maximumBy (compare `on` sumCosts) xs
 
     filterFeasible :: [Subset Item] -> [Subset Item]
     filterFeasible = filter (\xs -> sumCosts xs >= minC && sumWeights xs <= maxW)
