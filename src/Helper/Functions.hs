@@ -12,7 +12,7 @@ toSolution Nothing = Nothing
 toSolution (Just xs) = Just $ map fst xs
 
 showSolution :: Solution -> IO ()
-showSolution Nothing = error "Couldn't find a solution for the given knapsack instance! :("
+showSolution Nothing = putStrLn "False"
 showSolution (Just s) = print s
 
 sumCosts :: Subset Item -> Int

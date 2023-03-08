@@ -1,6 +1,8 @@
 import System.Environment (getArgs)
 import System.Exit (die)
+
 import Solver.Brute (brute)
+import Solver.Optim (optim)
 
 import Control.Applicative ((<|>))
 import Control.Monad (when)
@@ -13,10 +15,11 @@ import Parser (knapsackParser, parse)
 dispatch :: [(String, Knapsack -> IO ())]
 dispatch = [
              ("-i", print),
-             ("-b", showSolution . brute)
-            --  ("-o", optim)
+             ("-b", showSolution . brute),
+             ("-o", showSolution . optim)
            ]
 
+-- TODO: Switch to Integer? (overflow)
 main :: IO ()
 main = do
   args <- getArgs

@@ -11,6 +11,8 @@ import Helper.Types (Subset, Solution, Knapsack(..), Item)
 brute :: Knapsack -> Solution
 brute k = brute' (maxWeight k) (minCost k) (items k)
 
+-- FIXME: It may be enough to find a working solution. Don't need to search the whole problem space.
+-- https://moodle.vut.cz/mod/forum/discuss.php?d=1882
 brute' :: Int -> Int -> [Item] -> Solution
 brute' maxW minC xss = toSolution $ findBest $ filterFeasible $ subsets xss
   where

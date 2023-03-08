@@ -7,16 +7,32 @@ items: [
 	cost: 3
 	}
 	Item {
-	weight: 43
-	cost: 1129
-	}
-	Item {
 	weight: 202
 	cost: 94
 	}
 	Item {
 	weight: 149
 	cost: 2084
+	}
+	Item {
+	weight: 112
+	cost: 212
+	}
+	Item {
+	weight: 45
+	cost: 450
+	}
+	Item {
+	weight: 10
+	cost: 321
+	}
+	Item {
+	weight: 43
+	cost: 1129
+	}
+	Item {
+	weight: 34
+	cost: 2344
 	}
 ]
 }
