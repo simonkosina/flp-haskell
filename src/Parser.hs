@@ -12,7 +12,6 @@ import Helper.Types ( Knapsack(Knapsack), Item(Item) )
 
 parse rule = Parsec.parse rule "(source)"
 
--- FIXME: End of file as }EOF or }\nEOF?
 knapsackParser :: Parsec.Parsec String () Knapsack
 knapsackParser = do
   Parsec.string "Knapsack {" >> Parsec.newline

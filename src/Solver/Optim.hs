@@ -15,11 +15,11 @@ import Data.Maybe ( isJust )
 mutationRate :: Float
 mutationRate = 0.05 :: Float
 numPlayers :: Int
-numPlayers = 8
+numPlayers = 16
 populationSize :: Int
 populationSize = 1000
 iterations :: Int
-iterations = 100 :: Int
+iterations = 250 :: Int
 seed :: Int
 seed = 7
 
