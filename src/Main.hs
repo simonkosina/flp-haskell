@@ -10,6 +10,7 @@ import Control.Monad (when)
 import Helper.Types (Knapsack(..), Item(..), Solution)
 
 import Parser (knapsackParser, parse)
+import GHC.Core.Opt.Monad (errorMsg)
 
 dispatch :: [(String, Knapsack -> IO ())]
 dispatch = [
@@ -38,9 +39,9 @@ main = do
       knapsackString <- readFile filePath
       case parse knapsackParser knapsackString of
         (Right knapsack) -> action knapsack
-        (Left e) -> print e
+        (Left e) -> error $ show e
     else do
       knapsackString <- getContents
       case parse knapsackParser knapsackString of
         (Right knapsack) -> action knapsack
-        (Left e) -> print e
+        (Left e) -> error $ show e

@@ -3,6 +3,8 @@ module Parser (
   parse
 ) where
 
+import Control.Applicative
+
 import Text.Parsec ((<?>))
 import Text.Parsec qualified as Parsec
 
@@ -17,7 +19,7 @@ knapsackParser = do
   mW <- maxWeightParser
   mC <- minCostParser
   is <- itemsParser
-  Parsec.char '}' >> Parsec.eof
+  Parsec.char '}' >> (Parsec.eof <|> (Parsec.newline >> Parsec.eof))
   return (Knapsack mW mC is)
 
 maxWeightParser :: Parsec.Parsec String () Int
