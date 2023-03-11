@@ -2,29 +2,17 @@ module Solver.Brute (
   brute
 ) where
 
-import Data.List (maximumBy)
-import Data.Function (on)
-
-import Helper.Functions (toSolution, sumWeights, sumCosts)
+import Helper.Functions (sumWeights, sumCosts, getSolution)
 import Helper.Types (Subset, Solution, Knapsack(..), Item)
 
 brute :: Knapsack -> Solution
 brute k = brute' (maxWeight k) (minCost k) (items k)
 
--- FIXME: It may be enough to find a working solution. Don't need to search the whole problem space.
--- https://moodle.vut.cz/mod/forum/discuss.php?d=1882
 brute' :: Int -> Int -> [Item] -> Solution
-brute' maxW minC xss = toSolution $ findBest $ filterFeasible $ subsets xss
-  where
-    findBest :: [Subset Item] -> Maybe (Subset Item)
-    findBest [] = Nothing
-    findBest xs = Just $ maximumBy (compare `on` sumCosts) xs
+brute' maxW minC xss = getSolution minC maxW $ allSubsets xss
 
-    filterFeasible :: [Subset Item] -> [Subset Item]
-    filterFeasible = filter (\xs -> sumCosts xs >= minC && sumWeights xs <= maxW)
-
-subsets :: [a] -> [Subset a]
-subsets xs = subsets' (length xs) xs
+allSubsets :: [a] -> [Subset a]
+allSubsets xs = allSubsets' (length xs) xs
   where
-    subsets' 0 _ = [[]]
-    subsets' n (x : xs) = map ((1, x) :) (subsets' (n - 1) xs) ++ map ((0, x) :) (subsets' (n - 1) xs)
+    allSubsets' 0 _ = [[]]
+    allSubsets' n (x : xs) = map ((1, x) :) (allSubsets' (n - 1) xs) ++ map ((0, x) :) (allSubsets' (n - 1) xs)

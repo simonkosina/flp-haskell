@@ -8,10 +8,8 @@ import Text.Parsec qualified as Parsec
 
 import Helper.Types ( Knapsack(Knapsack), Item(Item) )
 
-parse rule text = Parsec.parse rule "(source)" text
+parse rule = Parsec.parse rule "(source)"
 
--- TODO: Switch weight/cost, maxWeight/minCost/items?
--- FIXME: Ask about the spacing of items (is it tab, spaces, fixed number, ...?)
 -- FIXME: End of file as }EOF or }\nEOF?
 knapsackParser :: Parsec.Parsec String () Knapsack
 knapsackParser = do

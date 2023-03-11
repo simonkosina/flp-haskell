@@ -8,7 +8,6 @@ import Control.Applicative ((<|>))
 import Control.Monad (when)
 
 import Helper.Types (Knapsack(..), Item(..), Solution)
-import Helper.Functions (showSolution)
 
 import Parser (knapsackParser, parse)
 
@@ -19,14 +18,16 @@ dispatch = [
              ("-o", showSolution . optim)
            ]
 
--- TODO: Switch to Integer? (overflow)
+showSolution :: Solution -> IO ()
+showSolution Nothing = putStrLn "False"
+showSolution (Just s) = print s
+
 main :: IO ()
 main = do
   args <- getArgs
   let option = head args
 
-  when (null args || length args > 2) $ die "usage: flp22-fun option [input]"
-  -- TODO: map fst dispatch instead of making a list? Same goes for error msg.
+  when (null args || length args > 2) $ die "usage: flp22-fun option [file]"
   when (option `notElem` ["-i", "-b", "-o"]) $ die $ "Unknown option '" ++ option ++ "', only -i, -b and -o are supported."
 
   let (Just action) = lookup option dispatch
