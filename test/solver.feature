@@ -1,5 +1,6 @@
 Feature: Check if options work properly
 
+  @brute
   Scenario Outline: Brute solver
     Given flp22-fun is available
     When flp22-fun is run with "-b" option and "<in>" file
@@ -22,6 +23,7 @@ Feature: Check if options work properly
       | data/test12.in  | data/test12.out |
       | data/test13.in  | data/test13.out |
   
+  @optim
   Scenario Outline: Optim solver
     Given flp22-fun is available
     When flp22-fun is run with "-o" option and "<in>" file

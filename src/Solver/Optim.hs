@@ -11,15 +11,14 @@ import Helper.Types (Subset, Solution, Knapsack(..), Item(..), Individual, Popul
 import Helper.Functions (sumCosts, sumWeights, differentRandomRs, finiteRandoms, getSolution)
 import Data.Maybe ( isJust )
 
--- TODO: Play with hyperparams
 mutationRate :: Float
-mutationRate = 0.05 :: Float
+mutationRate = 0.05
 numPlayers :: Int
 numPlayers = 16
 populationSize :: Int
 populationSize = 1000
 iterations :: Int
-iterations = 250 :: Int
+iterations = 250
 seed :: Int
 seed = 7
 
@@ -38,7 +37,8 @@ optim' fit pop gen it
 
 fitness :: Int -> Int -> Individual -> Int
 fitness minC maxW i
-  | sumWeights i > maxW || sumCosts i < minC = 0
+  | sumWeights i > maxW = maxW - sumWeights i
+  | sumCosts i < minC = sumCosts i - minC
   | otherwise = sumCosts i
 
 -- Randomly assign items to a new individual
