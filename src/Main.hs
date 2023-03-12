@@ -19,7 +19,10 @@ dispatch = [
 
 showSolution :: Solution -> IO ()
 showSolution Nothing = putStrLn "False"
-showSolution (Just s) = putStrLn $ "Solution " ++ show s
+showSolution (Just l) = putStrLn $ "Solution [" ++ helper l ++ "]"
+  where
+    helper [] = ""
+    helper (x:xs) = show x ++ if null xs then "" else " " ++ helper xs
 
 main :: IO ()
 main = do
