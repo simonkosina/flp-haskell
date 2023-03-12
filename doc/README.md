@@ -7,7 +7,7 @@ School project for the [FLP](https://www.fit.vut.cz/study/course/FLP/.cs) course
 Options are either `-i` to show information about the loaded knapsack problem isntance, `-b` solves the knapsack problem using brute force algorithm and the `-o` option uses a genetic algorithm to solve the problem. Knapsack instance can be either passed in as a file or from `stdin` (see the `test/data/test1.in` file for expected input format).
 
 # Project structure
-All the source code files can be found in the `src`directory. `Main.hs` takes care of all the IO actions, loads the input either from file or the `stdin` and parses it to create an internal representation of type `Knapsack`. The created data structure is then passed into the chosen solver algorithm.
+All the source code files can be found in the `src` directory. `Main.hs` takes care of all the IO actions, loads the input either from file or the `stdin` and parses it to create an internal representation of type `Knapsack`. The created data structure is then passed into the chosen solver algorithm.
 
 All the user defined types and shared functions can be found in the `Helper/Types.hs` and `Helper/Functions.hs` files respectively.
 

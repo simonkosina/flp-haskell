@@ -2,7 +2,7 @@ module Solver.Brute (
   brute
 ) where
 
-import Helper.Functions (sumWeights, sumCosts, getSolution)
+import Helper.Functions (getSolution)
 import Helper.Types (Subset, Solution, Knapsack(..), Item)
 
 brute :: Knapsack -> Solution
@@ -15,4 +15,5 @@ allSubsets :: [a] -> [Subset a]
 allSubsets xs = allSubsets' (length xs) xs
   where
     allSubsets' 0 _ = [[]]
-    allSubsets' n (x : xs) = map ((1, x) :) (allSubsets' (n - 1) xs) ++ map ((0, x) :) (allSubsets' (n - 1) xs)
+    allSubsets' _ [] = [[]]
+    allSubsets' n (y : ys) = map ((1, y) :) (allSubsets' (n - 1) ys) ++ map ((0, y) :) (allSubsets' (n - 1) ys)

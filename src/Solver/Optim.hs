@@ -7,9 +7,8 @@ import System.Random ( mkStdGen, Random(randomR), StdGen )
 import Data.Function (on)
 import Data.List (maximumBy)
 
-import Helper.Types (Subset, Solution, Knapsack(..), Item(..), Individual, Population)
+import Helper.Types (Solution, Knapsack(..), Item(..), Individual, Population)
 import Helper.Functions (sumCosts, sumWeights, differentRandomRs, finiteRandoms, getSolution)
-import Data.Maybe ( isJust )
 
 mutationRate :: Float
 mutationRate = 0.05
@@ -58,15 +57,15 @@ initPopulation items n gen =
 
 -- Create a new population by mating individuals and creating new children
 newPopulation :: (Individual -> Int) -> Population -> StdGen -> (Population, StdGen)
-newPopulation fit pop gen = newPopulation' fit pop [] gen
+newPopulation fit pop = newPopulation' fit pop []
   where
-    newPopulation' fit oldPop newPop gen
+    newPopulation' f oldPop newPop gen
       | length oldPop == length newPop = (newPop, gen)
       | otherwise = 
-        let (parent1, newGen1) = pickWinner fit oldPop gen
-            (parent2, newGen2) = pickWinner fit oldPop newGen1
+        let (parent1, newGen1) = pickWinner f oldPop gen
+            (parent2, newGen2) = pickWinner f oldPop newGen1
             (child, newGen3) = createChild parent1 parent2 newGen2
-        in newPopulation' fit oldPop (child:newPop) newGen3
+        in newPopulation' f oldPop (child:newPop) newGen3
 
 -- Split parent's genes in half and mutate them to create a child
 createChild :: Individual -> Individual -> StdGen -> (Individual, StdGen)

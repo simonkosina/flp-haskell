@@ -4,13 +4,11 @@ import System.Exit (die)
 import Solver.Brute (brute)
 import Solver.Optim (optim)
 
-import Control.Applicative ((<|>))
 import Control.Monad (when)
 
-import Helper.Types (Knapsack(..), Item(..), Solution)
+import Helper.Types (Knapsack(..), Solution)
 
 import Parser (knapsackParser, parse)
-import GHC.Core.Opt.Monad (errorMsg)
 
 dispatch :: [(String, Knapsack -> IO ())]
 dispatch = [
@@ -21,7 +19,7 @@ dispatch = [
 
 showSolution :: Solution -> IO ()
 showSolution Nothing = putStrLn "False"
-showSolution (Just s) = print s
+showSolution (Just s) = putStrLn $ "Solution " ++ show s
 
 main :: IO ()
 main = do
@@ -29,19 +27,17 @@ main = do
   let option = head args
 
   when (null args || length args > 2) $ die "usage: flp22-fun option [file]"
-  when (option `notElem` ["-i", "-b", "-o"]) $ die $ "Unknown option '" ++ option ++ "', only -i, -b and -o are supported."
 
-  let (Just action) = lookup option dispatch
+  knapsackString <- 
+    if length args == 2
+      then
+        readFile $ last args
+      else
+        getContents
 
-  if length args == 2
-    then do
-      let filePath = last args
-      knapsackString <- readFile filePath
+  case lookup option dispatch of
+    (Just action) ->
       case parse knapsackParser knapsackString of
         (Right knapsack) -> action knapsack
         (Left e) -> error $ show e
-    else do
-      knapsackString <- getContents
-      case parse knapsackParser knapsackString of
-        (Right knapsack) -> action knapsack
-        (Left e) -> error $ show e
+    Nothing -> error $ "Unknown option: " ++ option    

@@ -13,10 +13,11 @@ data Item = Item
   }
 
 instance Show Item where
+  show :: Item -> String
   show i = "\tItem {\n" ++ showWeight i ++ showCost i ++ "\t}\n"
     where
-      showWeight i = "\tweight: " ++ show (weight i) ++ "\n"
-      showCost i = "\tcost: " ++ show (cost i) ++ "\n"
+      showWeight x = "\tweight: " ++ show (weight x) ++ "\n"
+      showCost x = "\tcost: " ++ show (cost x) ++ "\n"
 
 data Knapsack = Knapsack
   { maxWeight :: Int,
@@ -25,11 +26,12 @@ data Knapsack = Knapsack
   }
 
 instance Show Knapsack where
+  show :: Knapsack -> String
   show k = "Knapsack {\n" ++ showWeight k ++ showCost k ++ showItems k ++ "}"
     where
-      showWeight k = "maxWeight: " ++ show (maxWeight k) ++ "\n"
-      showCost k = "minCost: " ++ show (minCost k) ++ "\n"
-      showItems k = "items: [\n" ++ showItems' (items k) ++ "]\n"
+      showWeight x = "maxWeight: " ++ show (maxWeight x) ++ "\n"
+      showCost x = "minCost: " ++ show (minCost x) ++ "\n"
+      showItems x = "items: [\n" ++ showItems' (items x) ++ "]\n"
       showItems' [] = ""
       showItems' (x:xs) = show x ++ showItems' xs
 

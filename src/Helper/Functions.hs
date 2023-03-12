@@ -44,7 +44,7 @@ finiteRandoms n gen =
 -- Generate n different samples in a given range
 -- Doesn't terminate if it's not possible to fit n samples into the given range
 differentRandomRs :: (RandomGen g, Random a, Eq a) => (a, a) -> Int -> g -> ([a], g)
-differentRandomRs (lower, upper) n gen = differentRandoms' n [] gen
+differentRandomRs (lower, upper) num = differentRandoms' num []
   where
     differentRandoms' n list gen
       | n == length list = (list, gen)
