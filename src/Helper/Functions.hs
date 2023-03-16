@@ -11,27 +11,23 @@ import Data.List (maximumBy)
 
 import System.Random ( Random(randomR, random), RandomGen )
 
-import Helper.Types ( Subset, Solution, Item(..) )
+import Helper.Types ( Solution, Item(..), Individual )
 
-getSolution :: Int -> Int -> [Subset Item] -> Solution
-getSolution minC maxW = toSolution . bestSolution . feasibleSolutions
+getSolution :: [Item] -> Int -> Int -> [Individual] -> Solution
+getSolution is minC maxW xs = bestSolution $ feasibleSolutions xs
   where
-    feasibleSolutions :: [Subset Item] -> [Subset Item]
-    feasibleSolutions = filter (\xs -> sumCosts xs >= minC && sumWeights xs <= maxW)
+    feasibleSolutions :: [Individual] -> [Individual]
+    feasibleSolutions = filter (\ys -> sumCosts is ys >= minC && sumWeights is ys <= maxW)
 
-    toSolution :: Maybe (Subset Item) -> Solution
-    toSolution Nothing = Nothing
-    toSolution (Just xs) = Just $ map fst xs
-
-    bestSolution :: [Subset Item] -> Maybe (Subset Item)
+    bestSolution :: [Individual] -> Maybe Individual
     bestSolution [] = Nothing
-    bestSolution xs = Just $ maximumBy (compare `on` sumCosts) xs
+    bestSolution ys = Just $ maximumBy (compare `on` sumCosts is) ys
 
-sumCosts :: Subset Item -> Int
-sumCosts xs = sum (map (cost . snd) (filter (\x -> fst x /= 0) xs))
+sumCosts :: [Item] -> Individual -> Int
+sumCosts is xs = sum $ zipWith (\i x -> x * cost i) is xs
 
-sumWeights :: Subset Item -> Int
-sumWeights xs = sum (map (weight . snd) (filter (\x -> fst x /= 0) xs))
+sumWeights :: [Item] -> Individual -> Int
+sumWeights is xs = sum $ zipWith (\i x -> x * weight i) is xs
 
 -- Generate n random samples
 finiteRandoms :: (RandomGen g, Random a) => Int -> g -> ([a], g)

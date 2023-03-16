@@ -2,18 +2,17 @@ module Solver.Brute (
   brute
 ) where
 
-import Helper.Functions (getSolution)
-import Helper.Types (Subset, Solution, Knapsack(..), Item)
+import Helper.Functions ( getSolution )
+import Helper.Types (Solution, Knapsack(..), Item(..))
 
 brute :: Knapsack -> Solution
 brute k = brute' (maxWeight k) (minCost k) (items k)
 
 brute' :: Int -> Int -> [Item] -> Solution
-brute' maxW minC xss = getSolution minC maxW $ allSubsets xss
-
-allSubsets :: [a] -> [Subset a]
-allSubsets xs = allSubsets' (length xs) xs
-  where
-    allSubsets' 0 _ = [[]]
-    allSubsets' _ [] = [[]]
-    allSubsets' n (y : ys) = map ((1, y) :) (allSubsets' (n - 1) ys) ++ map ((0, y) :) (allSubsets' (n - 1) ys)
+brute' maxW minC is = getSolution is minC maxW$ itemsCombinations $ length is
+  where 
+    itemsCombinations :: Int -> [[Int]]
+    itemsCombinations 0 = [[]]
+    itemsCombinations n 
+      | weight (is !! (length is - n)) > maxW = map (0 :) (itemsCombinations (n-1)) -- Filter out items with too much weight
+      | otherwise = map (0 :) (itemsCombinations (n-1)) ++ map (1 :) (itemsCombinations (n-1))

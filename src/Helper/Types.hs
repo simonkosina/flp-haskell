@@ -2,7 +2,6 @@ module Helper.Types (
   Item(..),
   Knapsack(..),
   Solution,
-  Subset,
   Individual,
   Population
 ) where
@@ -37,8 +36,6 @@ instance Show Knapsack where
 
 type Solution = Maybe [Int]
 
-type Subset a = [(Int, a)]
-
-type Individual = Subset Item
+type Individual = [Int]
 
 type Population = [Individual]

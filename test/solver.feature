@@ -22,6 +22,8 @@ Feature: Check if options work properly
       | data/test11.in  | data/test11.out |
       | data/test12.in  | data/test12.out |
       | data/test13.in  | data/test13.out |
+      | data/test14.in  | data/test14.out |
+      | data/test15.in  | data/test15.out |
   
   @optim
   Scenario Outline: Optim solver

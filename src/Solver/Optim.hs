@@ -17,15 +17,15 @@ numPlayers = 16
 populationSize :: Int
 populationSize = 1000
 iterations :: Int
-iterations = 250
+iterations = 50
 seed :: Int
 seed = 7
 
 optim :: Knapsack -> Solution
 optim k = 
-  let fitness' = fitness (minCost k) (maxWeight k)
+  let fitness' = fitness (items k) (minCost k) (maxWeight k)
       (population, newGen) = initPopulation (items k) populationSize (mkStdGen seed)
-  in getSolution (minCost k) (maxWeight k) $ optim' fitness' population newGen iterations
+  in getSolution (items k) (minCost k) (maxWeight k) $ optim' fitness' population newGen iterations
 
 optim' :: (Individual -> Int) -> Population -> StdGen -> Int -> Population
 optim' fit pop gen it
@@ -34,18 +34,18 @@ optim' fit pop gen it
     let (newP, newGen) = newPopulation fit pop gen
     in optim' fit newP newGen (it - 1)
 
-fitness :: Int -> Int -> Individual -> Int
-fitness minC maxW i
-  | sumWeights i > maxW = maxW - sumWeights i
-  | sumCosts i < minC = sumCosts i - minC
-  | otherwise = sumCosts i
+fitness :: [Item] -> Int -> Int -> Individual -> Int
+fitness is minC maxW ind
+  | sumWeights is ind > maxW = maxW - sumWeights is ind
+  | sumCosts is ind < minC = sumCosts is ind - minC
+  | otherwise = sumCosts is ind
 
 -- Randomly assign items to a new individual
 initIndividual :: [Item] -> StdGen -> (Individual, StdGen)
 initIndividual items gen =
   let (randomBools, newGen) = finiteRandoms (length items) gen :: ([Bool], StdGen)
       randomInts = map fromEnum randomBools
-  in (zip randomInts items, newGen)
+  in (randomInts, newGen)
 
 -- Initialize n individuals to create a population
 initPopulation :: [Item] -> Int -> StdGen -> (Population, StdGen)
@@ -80,7 +80,7 @@ mutate [] gen = ([], gen)
 mutate (i : is) gen =
   let (value, newGen) = randomR (0, 1) gen :: (Float, StdGen)
       flipBit b = if b == 0 then 1 else 0
-      newTuple = (if value < mutationRate then flipBit (fst i) else fst i, snd i)
+      newTuple = (if value < mutationRate then flipBit i else i)
       (restOfTuples, finalGen) = mutate is newGen
    in (newTuple : restOfTuples, finalGen)
 
